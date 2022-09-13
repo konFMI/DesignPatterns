@@ -1,6 +1,6 @@
 #include <iostream>
-#include "sell_stock.h"
-#include "stock.h"
+#include "../api/sell_stock.h"
+#include "../api/stock.h"
 
 SellStock::SellStock(Stock* pStock)
 {

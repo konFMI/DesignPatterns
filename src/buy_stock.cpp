@@ -1,5 +1,5 @@
 #include <iostream>
-#include "buy_stock.h"
+#include "../api/buy_stock.h"
 
 BuyStock::BuyStock(Stock *pStock)
 {

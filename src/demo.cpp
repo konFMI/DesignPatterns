@@ -1,8 +1,8 @@
 #include <memory>
-#include "stock.h"
-#include "buy_stock.h"
-#include "sell_stock.h"
-#include "broker.h"
+#include "../api/stock.h"
+#include "../api/buy_stock.h"
+#include "../api/sell_stock.h"
+#include "../api/broker.h"
 
 template <typename T>
 bool IsValidPointer(std::unique_ptr<T>& ptr)

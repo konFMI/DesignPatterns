@@ -1,5 +1,5 @@
 #include <iostream>
-#include "stock.h"
+#include "../api/stock.h"
 
 Stock::Stock()
 {
