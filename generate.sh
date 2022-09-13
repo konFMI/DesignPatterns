@@ -25,7 +25,6 @@ class Stock {
     private:
         std::string m_name;
         int         m_quantity;
-        int         m_total;
 
 };" > stock.h
 
@@ -36,7 +35,6 @@ Stock::Stock()
 {
     m_name      = \"domati\";
     m_quantity  = 10;
-    m_total     = 0;
     std::cout << \"Created Stock.\n\";
 }
 
@@ -47,14 +45,12 @@ Stock::~Stock()
 
 void Stock::Buy()
 {
-    m_total += m_quantity;
-    std::cout << \"Stock [ Name: \" << m_name << \" Quantity: \" <<  m_quantity << \" Total: \" << m_total << \" ] bought\n\";
+    std::cout << \"Stock [ Name: \" << m_name << \"Quantity: \" <<  m_quantity << \" ] bought\n\";
 }
 
 void Stock::Sell()
 {
-    m_total -= m_quantity;
-    std::cout << \"Stock [ Name: \" << m_name << \" Quantity: \" <<  m_quantity << \" Total: \" << m_total << \" ] sold\n\";
+    std::cout << \"Stock [ Name: \" << m_name << \"Quantity: \" <<  m_quantity << \" ] sold\n\";
 }" > stock.cpp
 
 echo "#pragma once
@@ -133,52 +129,37 @@ echo "#include <memory>
 #include \"sell_stock.h\"
 #include \"broker.h\"
 
-#define CAST_2VOID_PTR(ptr)(reinterpret_cast<void*>((ptr)))
-
-bool IsValidPointer(void *ptr)
+template <typename T>
+bool IsValidPointer(std::unique_ptr<T>& ptr)
 {
-    return nullptr != ptr;
+    return nullptr != ptr.get();
 }
 
 int main() {
-    Stock* pStock     = new Stock;
-    bool   bCondition = IsValidPointer(CAST_2VOID_PTR(pStock));
+    std::unique_ptr<Stock> pStock = std::make_unique<Stock>();
+    bool   bCondition = IsValidPointer(pStock);
 
     if (bCondition)
     {
-        BuyStock*  pBuyStockOrder  = new BuyStock(pStock);
-        SellStock* pSellStockOrder = new SellStock(pStock);
-        Broker*    pBroker         = new Broker;
+        std::unique_ptr<BuyStock>  pBuyStockOrder  = std::make_unique<BuyStock>(pStock.get());
+        std::unique_ptr<SellStock> pSellStockOrder = std::make_unique<SellStock>(pStock.get());
+        std::unique_ptr<Broker>    pBroker         = std::make_unique<Broker>();
 
-        bCondition = IsValidPointer(CAST_2VOID_PTR(pBuyStockOrder))  &&
-                     IsValidPointer(CAST_2VOID_PTR(pSellStockOrder)) &&
-                     IsValidPointer(CAST_2VOID_PTR(pBroker));
+        bCondition = IsValidPointer(pBuyStockOrder)  &&
+                     IsValidPointer(pSellStockOrder) &&
+                     IsValidPointer(pBroker);
 
         if (bCondition)
         {
-            pBroker->TakeOrder(pBuyStockOrder);
-            pBroker->TakeOrder(pSellStockOrder);
+            pBroker->TakeOrder(pBuyStockOrder.get());
+            pBroker->TakeOrder(pBuyStockOrder.get());
+            pBroker->TakeOrder(pBuyStockOrder.get());
+            pBroker->TakeOrder(pBuyStockOrder.get());
+            pBroker->TakeOrder(pBuyStockOrder.get());
+            pBroker->TakeOrder(pSellStockOrder.get());
         }
 
         pBroker->PlaceOrders();
-
-        if (pBroker)
-        {
-            delete pBroker;
-        }
-        if (pSellStockOrder)
-        {
-            delete pSellStockOrder;
-        }
-        if (pBuyStockOrder)
-        {
-            delete pBuyStockOrder;
-        }
-    }
-
-    if (pStock)
-    {
-        delete pStock;
     }
 
     return 0;
